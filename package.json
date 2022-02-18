@@ -1,0 +1,75 @@
+{
+  "name": "sveltekit-electron",
+  "private": true,
+  "version": "0.0.0",
+  "main": "output/electron/main.cjs",
+  "type": "module",
+  "scripts": {
+    "tsc:main": "tsc -p tsconfig.e.json",
+    "preview": "cross-env NODE_ENV=production electron ./",
+    "watch": "tsc-watch --noClear -p tsconfig.e.json --onSuccess \"npm-run-all start:main\"",
+    "start": "kill-port 3333 && concurrently -k \"pnpm start:svelte\" \"wait-on tcp:3333 && pnpm watch\"",
+    "start:svelte": "vite",
+    "start:main": "cross-env NODE_ENV=development electron ./",
+    "build": "npm-run-all build:svelte build:main",
+    "build:svelte": "vite build",
+    "build:main": "tsc -p tsconfig.e.json",
+    "pack:all": "electron-builder --mac  --windows",
+    "pack:mac": "electron-builder --mac",
+    "pack:win": "electron-builder --windows"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
+    "@tsconfig/svelte": "^2.0.1",
+    "concurrently": "^7.0.0",
+    "cross-env": "^7.0.3",
+    "electron": "^17.0.0",
+    "electron-builder": "^22.13.1",
+    "kill-port": "^1.6.1",
+    "npm-run-all": "^4.1.5",
+    "svelte": "^3.44.0",
+    "svelte-check": "^2.2.7",
+    "svelte-preprocess": "^4.9.8",
+    "tsc-watch": "^4.6.0",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.4",
+    "vite": "^2.8.0",
+    "wait-on": "^6.0.1"
+  },
+  "build": {
+    "appId": "sveltekit-electron-demo",
+    "productName": "测试模板",
+    "copyright": "Copyright © 2022 Peach",
+    "asar": false,
+    "directories": {
+      "output": "output/app"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "!node_modules",
+      "output/electron/**/*",
+      "output/render/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "public/cccs.icns"
+    }
+  },
+  "dependencies": {
+    "electron-serve": "^1.1.0"
+  }
+}
