@@ -1,4 +1,4 @@
-# electron + svelteKit (typescript)
+# electron + svelte (typescript)
 
 ``` shell
   pnpm i
